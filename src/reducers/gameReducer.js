@@ -1,14 +1,30 @@
-export const buildInitialState = () => {
-    let initial = []
-
-    for(let row = 1; row <= 10; row++) {
-        for(let col = 1; col <= 10; col++) {
-            initial.push({row, col, value: null})
-        }
+const buildBoard = () => {
+  let board = []
+  for (let row = 1; row <= 10; row++) {
+    for (let col = 1; col <= 10; col++) {
+      board.push({ row, col, value: null })
     }
-    return initial
+  }
+  return board
 }
 
-export const gameReducer = (state = [], action) => {
-    return state;
+const initialState = {
+  game: {
+    board: buildBoard()
+  }
+}
+
+const updateField = (row, col, value, state) => {
+  const newBoard = JSON.parse(JSON.stringify(state.game.board));
+  newBoard.filter(field => field.row === row && field.col === col)[0].value = value
+  return {...state, game: {...state.game, board: newBoard}}
+}
+
+export const gameReducer = (state = initialState, action) => {
+  switch(action.type) {
+    case 'UPDATE_BOARD':
+      return updateField(action.row, action.col, action.value, state);
+    default:
+      return state;
+  }
 }

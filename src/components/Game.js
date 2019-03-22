@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { buildInitialState } from '../reducers/gameReducer';
+import { connect } from 'react-redux';
 import { Board } from './Board';
-
-const initialState = buildInitialState()
+import { updateBoard } from '../actions/gameActions';
 
 const buildBoard = state => {
   let board = []
@@ -12,13 +11,24 @@ const buildBoard = state => {
   return board
 }
 
-export class Game extends Component {
+class GamePure extends Component {
+  handleClick(row, col) {
+    this.props.makeDecision(row, col)
+  }
+
   render() {
     return (
       <div>
         <h1>Game</h1>
-        <Board board={buildBoard(initialState)} />
+        <Board board={buildBoard(this.props.board)} handleClick={this.handleClick.bind(this)} />
       </div>
     )
   }
 }
+
+export const Game = connect(
+  state => ({ board: state.game.board }),
+  dispatch => ({
+    makeDecision: (row, col) => dispatch(updateBoard(row, col))
+  })
+)(GamePure)
