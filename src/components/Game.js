@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Board } from './Board';
 import { updateBoard } from '../actions/gameActions';
+import { SelectShip } from './SelectShip';
 
 const buildBoard = state => {
   let board = []
@@ -21,6 +22,7 @@ class GamePure extends Component {
       <div>
         <h1>Game</h1>
         <Board board={buildBoard(this.props.board)} handleClick={this.handleClick.bind(this)} />
+        <SelectShip />
       </div>
     )
   }

@@ -10,7 +10,8 @@ const buildBoard = () => {
 
 const initialState = {
   game: {
-    board: buildBoard()
+    board: buildBoard(),
+    selectedShip: "2"
   }
 }
 
@@ -24,6 +25,8 @@ export const gameReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'UPDATE_BOARD':
       return updateField(action.row, action.col, action.value, state);
+    case 'SELECT_SHIP':
+      return {...state, game: {...state.game, selectedShip: action.value}};
     default:
       return state;
   }

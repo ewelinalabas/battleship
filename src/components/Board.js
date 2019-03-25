@@ -23,7 +23,6 @@ const Field = props => (
   </td>
 )
 
-
 export const Board = props => {
   return (
     <table style={{ borderCollapse: 'collapse' }}>
