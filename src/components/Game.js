@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Board } from './Board';
-import { updateBoard } from '../actions/gameActions';
+import { makeDecision } from '../actions/gameActions';
 import { SelectShip } from './SelectShip';
 
 const buildBoard = state => {
@@ -31,6 +31,6 @@ class GamePure extends Component {
 export const Game = connect(
   state => ({ board: state.game.board }),
   dispatch => ({
-    makeDecision: (row, col) => dispatch(updateBoard(row, col))
+    makeDecision: (row, col) => dispatch(makeDecision(row, col))
   })
 )(GamePure)

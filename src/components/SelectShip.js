@@ -19,8 +19,8 @@ class SelectShipPure extends Component {
       <div>
         <h3>SELECT BATTLESHIP</h3>
         <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
-          {Object.entries(SHIPS).map(el =>
-            <option value={el[0]}>{el[1]}</option>
+          {Object.entries(SHIPS).map((el, i) =>
+            <option value={el[0]} key={i}>{el[1]}</option>
           )}
         </select>
         <p>Current selection: {SHIPS[this.props.selectedShip]}</p>

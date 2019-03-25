@@ -11,14 +11,18 @@ const buildBoard = () => {
 const initialState = {
   game: {
     board: buildBoard(),
-    selectedShip: "2"
+    selectedShip: "2",
+    selectedFields: []
   }
 }
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state.game.board));
   newBoard.filter(field => field.row === row && field.col === col)[0].value = value
-  return {...state, game: {...state.game, board: newBoard}}
+
+  const selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
+  selectedFields.push({row, col})
+  return {...state, game: {...state.game, board: newBoard, selectedFields}}
 }
 
 export const gameReducer = (state = initialState, action) => {
