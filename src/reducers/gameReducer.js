@@ -22,6 +22,7 @@ const updateField = (row, col, value, state) => {
 
   const selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
   selectedFields.push({row, col})
+
   return {...state, game: {...state.game, board: newBoard, selectedFields}}
 }
 
