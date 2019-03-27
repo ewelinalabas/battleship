@@ -11,7 +11,7 @@ const buildBoard = () => {
 const initialState = {
   game: {
     board: buildBoard(),
-    selectedShip: "2",
+    selectedShip: "4",
     selectedFields: []
   }
 }
