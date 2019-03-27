@@ -1,5 +1,6 @@
 const UPDATE_BOARD = 'UPDATE_BOARD';
 const SELECT_SHIP = 'SELECT_SHIP'; 
+const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
 
 export const makeDecision = (row, col) => {
   return (dispatch, getState) => {
@@ -23,4 +24,8 @@ const updateBoard = (row, col) => ({
 export const selectShip = value => ({
   type: SELECT_SHIP,
   value
+})
+
+export const confirmShipSelection = () => ({
+  type: CONFIRM_SHIP_SELECTION
 })

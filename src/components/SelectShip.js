@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectShip } from '../actions/gameActions';
+import { selectShip, confirmShipSelection } from '../actions/gameActions';
 
 const SHIPS = {
   "1": "Single-decker",
@@ -11,8 +11,13 @@ const SHIPS = {
 
 class SelectShipPure extends Component {
   handleChange(event) {
-    this.props.selectShip(event.target.value)
+    this.props.selectShipType(event.target.value)
   }
+
+  handleConfirmation() {
+    this.props.confirmSelection()
+  }
+  //handleRejection() {}
 
   render() {
     return (
@@ -23,7 +28,9 @@ class SelectShipPure extends Component {
             <option value={el[0]} key={i}>{el[1]}</option>
           )}
         </select>
-        <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
+          <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
+          <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
+          <button type="button">Correct</button>
       </div>
     )
   }
@@ -32,6 +39,7 @@ class SelectShipPure extends Component {
 export const SelectShip = connect(
   state => ({ selectedShip: state.game.selectedShip }),
   dispatch => ({
-    selectShip: value => dispatch(selectShip(value))
+    selectShipType: value => dispatch(selectShip(value)),
+    confirmSelection: () => dispatch(confirmShipSelection())
   })
 )(SelectShipPure)

@@ -32,6 +32,8 @@ export const gameReducer = (state = initialState, action) => {
       return updateField(action.row, action.col, action.value, state);
     case 'SELECT_SHIP':
       return {...state, game: {...state.game, selectedShip: action.value}};
+    case 'CONFIRM_SHIP_SELECTION':
+      return {...state, game: {...state.game, selectedFields: []}}
     default:
       return state;
   }
