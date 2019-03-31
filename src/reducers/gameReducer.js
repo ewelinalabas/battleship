@@ -1,3 +1,5 @@
+import { getField } from '../lib/board'
+
 const buildBoard = () => {
   let board = []
   for (let row = 1; row <= 10; row++) {
@@ -18,12 +20,18 @@ const initialState = {
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state.game.board));
-  newBoard.filter(field => field.row === row && field.col === col)[0].value = value
+  getField(newBoard, row, col).value = value
+  let newSelectedFields
+  let selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
+  if(value != "X") {
+    newSelectedFields = selectedFields.filter(field => !(field.row == row && field.col == col))
+   } else {
+    selectedFields.push({row, col})
+    newSelectedFields = selectedFields
+   }
+  console.log(newSelectedFields)
 
-  const selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
-  selectedFields.push({row, col})
-
-  return {...state, game: {...state.game, board: newBoard, selectedFields}}
+  return {...state, game: {...state.game, board: newBoard, selectedFields: newSelectedFields}}
 }
 
 export const gameReducer = (state = initialState, action) => {

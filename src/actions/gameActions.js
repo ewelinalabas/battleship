@@ -1,3 +1,5 @@
+import { getField } from '../lib/board'
+
 const UPDATE_BOARD = 'UPDATE_BOARD';
 const SELECT_SHIP = 'SELECT_SHIP'; 
 const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
@@ -12,7 +14,6 @@ const validateIfNeighbour = (row, col, selectedFields) => {
 const validateIfInline = (row, col, selectedFields) => {
   const rows = selectedFields.filter(f => f.row == row).length == selectedFields.length
   const cols = selectedFields.filter(f => f.col == col).length == selectedFields.length
-  debugger
   return (rows && !cols) ||(!rows && cols)
 }
 
@@ -33,17 +34,20 @@ const validateMove = (row, col, game) => {
 
 export const makeDecision = (row, col) => {
   return (dispatch, getState) => {
-    if(validateMove(row, col, getState().game)) {
-      dispatch(updateBoard(row, col))
+    const { game } = getState();
+
+    if(validateMove(row, col, game)) {
+      const value = getField(game.board, row, col).value ? null : "X"
+      dispatch(updateBoard(row, col, value))
     }
   }
 }
 
-const updateBoard = (row, col) => ({
+const updateBoard = (row, col, value) => ({
     type: UPDATE_BOARD,
     row,
     col,
-    value: 'X'
+    value
   }
 )
 
