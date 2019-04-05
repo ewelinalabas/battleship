@@ -6,14 +6,14 @@ const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
 
 const validateIfNeighbour = (row, col, selectedFields) => {
   const ifNeighbours = selectedFields.map(f => {
-    return (row == f.row + 1) || (row == f.row - 1) || (col == f.col + 1) || (col == f.col - 1)
+    return (row === f.row + 1) || (row === f.row - 1) || (col === f.col + 1) || (col === f.col - 1)
   })
-  return ifNeighbours.filter(el => el == true).length > 0 
+  return ifNeighbours.filter(el => el === true).length > 0 
 }
 
 const validateIfInline = (row, col, selectedFields) => {
-  const rows = selectedFields.filter(f => f.row == row).length == selectedFields.length
-  const cols = selectedFields.filter(f => f.col == col).length == selectedFields.length
+  const rows = selectedFields.filter(f => f.row === row).length === selectedFields.length
+  const cols = selectedFields.filter(f => f.col === col).length === selectedFields.length
   return (rows && !cols) ||(!rows && cols)
 }
 
@@ -25,7 +25,7 @@ const validateNumberOfSelectedFields = (game) => {
 }
 
 const validateMove = (row, col, game) => {
-  if(game.selectedFields.length == 0) return true
+  if(game.selectedShip && game.selectedFields.length === 0) return true
 
   return validateNumberOfSelectedFields(game)
     && validateIfNeighbour(row, col, game.selectedFields) 

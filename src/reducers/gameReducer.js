@@ -13,8 +13,14 @@ const buildBoard = () => {
 const initialState = {
   game: {
     board: buildBoard(),
-    selectedShip: "4",
-    selectedFields: []
+    selectedShip: "1",
+    selectedFields: [],
+    shipsCounter: {
+      "4": 1,
+      "3": 2,
+      "2": 3,
+      "1": 4
+    }
   }
 }
 
@@ -23,15 +29,23 @@ const updateField = (row, col, value, state) => {
   getField(newBoard, row, col).value = value
   let newSelectedFields
   let selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
-  if(value != "X") {
-    newSelectedFields = selectedFields.filter(field => !(field.row == row && field.col == col))
-   } else {
+  if(value !== "X") {
+    newSelectedFields = selectedFields.filter(field => !(field.row === row && field.col === col))
+  } else {
     selectedFields.push({row, col})
     newSelectedFields = selectedFields
-   }
+  }
   console.log(newSelectedFields)
 
   return {...state, game: {...state.game, board: newBoard, selectedFields: newSelectedFields}}
+}
+
+const updateAvailableShips = state => {
+  const newGame = JSON.parse(JSON.stringify(state.game));
+  newGame.shipsCounter[newGame.selectedShip] -= 1
+  const firtsAvailable = Object.keys(newGame.shipsCounter).filter(key => newGame.shipsCounter[key] >0)[0]
+
+  return {...state, game: {...state.game, selectedShip: firtsAvailable, selectedFields: [], shipsCounter: newGame.shipsCounter}}
 }
 
 export const gameReducer = (state = initialState, action) => {
@@ -41,7 +55,7 @@ export const gameReducer = (state = initialState, action) => {
     case 'SELECT_SHIP':
       return {...state, game: {...state.game, selectedShip: action.value}};
     case 'CONFIRM_SHIP_SELECTION':
-      return {...state, game: {...state.game, selectedFields: []}}
+      return updateAvailableShips(state);
     default:
       return state;
   }

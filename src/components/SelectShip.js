@@ -2,11 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { selectShip, confirmShipSelection } from '../actions/gameActions';
 
+
 const SHIPS = {
   "1": "Single-decker",
   "2": "Two-decker",
   "3": "Three-decker",
   "4": "Four-decker"
+}
+const availableShips = (counter, ships) => {
+  return Object
+    .keys(counter)
+    .filter(key => counter[key] > 0)
+    .reduce((prevValue, el) => {
+      prevValue[el] = ships[el]
+      return prevValue;
+    }, {});
 }
 
 class SelectShipPure extends Component {
@@ -24,7 +34,7 @@ class SelectShipPure extends Component {
       <div>
         <h3>SELECT BATTLESHIP</h3>
         <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
-          {Object.entries(SHIPS).map((el, i) =>
+          {Object.entries(availableShips(this.props.counter, SHIPS)).map((el, i) => 
             <option value={el[0]} key={i}>{el[1]}</option>
           )}
         </select>

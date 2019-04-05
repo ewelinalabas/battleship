@@ -22,14 +22,14 @@ class GamePure extends Component {
       <div>
         <h1>Game</h1>
         <Board board={buildBoard(this.props.board)} handleClick={this.handleClick.bind(this)} />
-        <SelectShip />
+        <SelectShip counter={this.props.shipsCounter}/>
       </div>
     )
   }
 }
 
 export const Game = connect(
-  state => ({ board: state.game.board }),
+  state => ({ board: state.game.board, shipsCounter: state.game.shipsCounter }),
   dispatch => ({
     makeDecision: (row, col) => dispatch(makeDecision(row, col))
   })
