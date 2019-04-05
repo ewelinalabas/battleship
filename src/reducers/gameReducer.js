@@ -13,7 +13,7 @@ const buildBoard = () => {
 const initialState = {
   game: {
     board: buildBoard(),
-    selectedShip: "1",
+    selectedShip: "4",
     selectedFields: [],
     shipsCounter: {
       "4": 1,
@@ -35,7 +35,6 @@ const updateField = (row, col, value, state) => {
     selectedFields.push({row, col})
     newSelectedFields = selectedFields
   }
-  console.log(newSelectedFields)
 
   return {...state, game: {...state.game, board: newBoard, selectedFields: newSelectedFields}}
 }
