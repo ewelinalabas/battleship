@@ -45,7 +45,6 @@ const isCheckingAction = (row, col, game) => {
 const validateMove = (row, col, game) => {
   if (game.selectedShip && isEmptyBoard(game.board)) return true
   const checking_action = isCheckingAction(row, col, game)
-  console.log(checking_action)
   return checking_action ? validateChecking(row, col, game) : validateUnchecking(row, col, game)
 }
 

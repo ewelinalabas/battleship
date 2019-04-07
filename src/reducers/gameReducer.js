@@ -1,4 +1,4 @@
-import { getField } from '../lib/board'
+import { getField, findAllEmptyNeighbours } from '../lib/board';
 
 const buildBoard = () => {
   let board = []
@@ -42,9 +42,16 @@ const updateField = (row, col, value, state) => {
 const updateAvailableShips = state => {
   const newGame = JSON.parse(JSON.stringify(state.game));
   newGame.shipsCounter[newGame.selectedShip] -= 1
-  const firtsAvailable = Object.keys(newGame.shipsCounter).filter(key => newGame.shipsCounter[key] >0)[0]
+  const firtsAvailable = Object.keys(newGame.shipsCounter).filter(key => newGame.shipsCounter[key] > 0)[0]
 
-  return {...state, game: {...state.game, selectedShip: firtsAvailable, selectedFields: [], shipsCounter: newGame.shipsCounter}}
+  const newBoard = JSON.parse(JSON.stringify(newGame.board));
+  newGame.selectedFields.forEach(el => {
+    findAllEmptyNeighbours(newBoard, el.row, el.col).forEach(n => {
+      getField(newBoard, n.row, n.col).value = "#"
+    })
+  })
+
+  return {...state, game: {...state.game, board: newBoard, selectedShip: firtsAvailable, selectedFields: [], shipsCounter: newGame.shipsCounter}}
 }
 
 export const gameReducer = (state = initialState, action) => {
