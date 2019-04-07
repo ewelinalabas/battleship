@@ -11,6 +11,7 @@ const buildBoard = () => {
 }
 
 const initialState = {
+  showBoard: false,
   game: {
     board: buildBoard(),
     selectedShip: "4",
@@ -62,6 +63,8 @@ export const gameReducer = (state = initialState, action) => {
       return {...state, game: {...state.game, selectedShip: action.value}};
     case 'CONFIRM_SHIP_SELECTION':
       return updateAvailableShips(state);
+    case 'REVEAL_BOARD':
+        return {...state, showBoard: true}
     default:
       return state;
   }

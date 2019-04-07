@@ -3,6 +3,7 @@ import { getField, isEmptyBoard, isAlreadyMarked } from '../lib/board'
 const UPDATE_BOARD = 'UPDATE_BOARD';
 const SELECT_SHIP = 'SELECT_SHIP';
 const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
+const REVEAL_BOARD = 'REVEAL_BOARD';
 
 const validateIfNeighbour = (row, col, selectedFields) => {
   const ifNeighbours = selectedFields.map(f => {
@@ -74,4 +75,8 @@ export const selectShip = value => ({
 
 export const confirmShipSelection = () => ({
   type: CONFIRM_SHIP_SELECTION
+})
+
+export const revealBoard = () => ({
+  type: REVEAL_BOARD
 })
