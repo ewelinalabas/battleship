@@ -30,7 +30,7 @@ class SelectShipPure extends Component {
   //handleRejection() {}
 
   render() {
-    return (
+    return Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0 ? 
       <div>
         <h3>SELECT BATTLESHIP</h3>
         <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
@@ -41,8 +41,10 @@ class SelectShipPure extends Component {
           <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
           <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
           <button type="button">Correct</button>
+      </div> : 
+      <div>
+        <p>Your fleet is ready for the battle!</p>
       </div>
-    )
   }
 }
 

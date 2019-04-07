@@ -6,7 +6,7 @@ const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
 
 const validateIfNeighbour = (row, col, selectedFields) => {
   const ifNeighbours = selectedFields.map(f => {
-    return (row === f.row + 1) || (row === f.row - 1) || (col === f.col + 1) || (col === f.col - 1) || ((row == f.row) && (col == f.col))
+    return (row === f.row + 1) || (row === f.row - 1) || (col === f.col + 1) || (col === f.col - 1)
   })
   return ifNeighbours.filter(el => el === true).length > 0
 }
