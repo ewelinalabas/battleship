@@ -1,4 +1,5 @@
 import { getField, findAllEmptyNeighbours } from '../lib/board';
+import { board } from './boardFixedValue';
 
 const buildBoard = () => {
   let board = []
@@ -13,14 +14,16 @@ const buildBoard = () => {
 const initialState = {
   showBoard: false,
   game: {
-    board: buildBoard(),
-    selectedShip: "4",
+    board: board,
+    shootingBoard: buildBoard(),
+    battlePhase: false,
+    selectedShip: null,
     selectedFields: [],
     shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
+      "4": 0,
+      "3": 0,
+      "2": 0,
+      "1": 0
     }
   }
 }
@@ -55,6 +58,14 @@ const updateAvailableShips = state => {
   return {...state, game: {...state.game, board: newBoard, selectedShip: firtsAvailable, selectedFields: [], shipsCounter: newGame.shipsCounter}}
 }
 
+const shootField = (row, col, state) => {
+  const newshootingBoard = JSON.parse(JSON.stringify(state.game.shootingBoard));
+  const isHit = getField(state.game.board, row, col).value === 'X' ? 'H' : '.'
+  getField(newshootingBoard, row, col).value = isHit
+
+  return {...state, game: {...state.game, shootingBoard: newshootingBoard}}
+}
+
 export const gameReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'UPDATE_BOARD':
@@ -64,7 +75,11 @@ export const gameReducer = (state = initialState, action) => {
     case 'CONFIRM_SHIP_SELECTION':
       return updateAvailableShips(state);
     case 'REVEAL_BOARD':
-        return {...state, showBoard: true}
+        return {...state, showBoard: true};
+    case 'ENTER_BATTLE_PHASE':
+        return {...state, game: {...state.game, battlePhase: true}};
+    case 'SHOOT_FIELD':
+        return shootField(action.row, action.col, state)
     default:
       return state;
   }

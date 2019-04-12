@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Board } from './Board';
-import { makeDecision, revealBoard } from '../actions/gameActions';
+import { makeDecision, revealBoard, shoot } from '../actions/gameActions';
 import { SelectShip } from './SelectShip';
 
 const buildBoard = state => {
@@ -17,14 +17,24 @@ class GamePure extends Component {
     this.props.makeDecision(row, col)
   }
 
+  handleShoot(row, col) {
+    this.props.shoot(row, col)
+  }
+
   render() {
-    console.log(this.props.showBoard)
-    if(this.props.showBoard === true) {
+    if(this.props.showBoard === true && this.props.battlePhase === false) {
       return (
         <div>
           <h1>Game</h1>
           <Board board={buildBoard(this.props.board)} handleClick={this.handleClick.bind(this)} />
           <SelectShip counter={this.props.shipsCounter}/>
+        </div>
+      )
+    } else if (this.props.showBoard === true && this.props.battlePhase === true) {
+      return (
+        <div>
+          <h1>Battle</h1>
+          <Board board={buildBoard(this.props.shootingBoard)} handleClick={this.handleShoot.bind(this)}/>
         </div>
       )
     } else {
@@ -36,9 +46,16 @@ class GamePure extends Component {
 }
 
 export const Game = connect(
-  state => ({ showBoard: state.showBoard, board: state.game.board, shipsCounter: state.game.shipsCounter }),
+  state => ({ 
+    showBoard: state.showBoard, 
+    board: state.game.board, 
+    shootingBoard: state.game.shootingBoard,
+    shipsCounter: state.game.shipsCounter, 
+    battlePhase: state.game.battlePhase 
+  }),
   dispatch => ({
     makeDecision: (row, col) => dispatch(makeDecision(row, col)),
-    revealBoard: () => dispatch(revealBoard())
+    revealBoard: () => dispatch(revealBoard()),
+    shoot: (row, col) => dispatch(shoot(row, col))
   })
 )(GamePure)

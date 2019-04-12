@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectShip, confirmShipSelection } from '../actions/gameActions';
+import { selectShip, confirmShipSelection, enterBattlePhase } from '../actions/gameActions';
 
 
 const SHIPS = {
@@ -27,7 +27,10 @@ class SelectShipPure extends Component {
   handleConfirmation() {
     this.props.confirmSelection()
   }
-  //handleRejection() {}
+
+  startBattle() {
+    this.props.startBattle()
+  }
 
   render() {
     return Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0 ? 
@@ -40,10 +43,10 @@ class SelectShipPure extends Component {
         </select>
           <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
           <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
-          <button type="button">Correct</button>
       </div> : 
       <div>
         <p>Your fleet is ready for the battle!</p>
+        <button type="button" onClick={() => {this.startBattle()}}>Start battle</button>
       </div>
   }
 }
@@ -52,6 +55,7 @@ export const SelectShip = connect(
   state => ({ selectedShip: state.game.selectedShip }),
   dispatch => ({
     selectShipType: value => dispatch(selectShip(value)),
-    confirmSelection: () => dispatch(confirmShipSelection())
+    confirmSelection: () => dispatch(confirmShipSelection()),
+    startBattle: () => dispatch(enterBattlePhase())
   })
 )(SelectShipPure)
