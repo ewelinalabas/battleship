@@ -21,6 +21,10 @@ export const findAllEmptyNeighbours = (board, row, col) => {
   return neighbours.filter(f => !f.value).filter(f => !(f.row === row && f.col === col))
 }
 
+export const validateIfShipSunk = (board, hits) => {
+
+}
+
 const validateIfNeighbour = (row, col, selectedFields) => {
   const ifNeighbours = selectedFields.map(f => {
     return (row === f.row + 1) || (row === f.row - 1) || (col === f.col + 1) || (col === f.col - 1)

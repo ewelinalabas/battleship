@@ -12,18 +12,20 @@ const buildBoard = () => {
 }
 
 const initialState = {
-  showBoard: false,
+  showBoard: true,
   game: {
-    board: board,
+    board: buildBoard(),
     shootingBoard: buildBoard(),
     battlePhase: false,
-    selectedShip: null,
+    selectedShip: "1",
+    ships: [],
     selectedFields: [],
+    shootedFields: [],
     shipsCounter: {
-      "4": 0,
-      "3": 0,
-      "2": 0,
-      "1": 0
+      "4": 1,
+      "3": 2,
+      "2": 3,
+      "1": 4
     }
   }
 }
@@ -33,14 +35,14 @@ const updateField = (row, col, value, state) => {
   getField(newBoard, row, col).value = value
   let newSelectedFields
   let selectedFields = JSON.parse(JSON.stringify(state.game.selectedFields));
-  if(value !== "X") {
+  if (value !== "X") {
     newSelectedFields = selectedFields.filter(field => !(field.row === row && field.col === col))
   } else {
-    selectedFields.push({row, col})
+    selectedFields.push({ row, col })
     newSelectedFields = selectedFields
   }
 
-  return {...state, game: {...state.game, board: newBoard, selectedFields: newSelectedFields}}
+  return { ...state, game: { ...state.game, board: newBoard, selectedFields: newSelectedFields } }
 }
 
 const updateAvailableShips = state => {
@@ -55,7 +57,23 @@ const updateAvailableShips = state => {
     })
   })
 
-  return {...state, game: {...state.game, board: newBoard, selectedShip: firtsAvailable, selectedFields: [], shipsCounter: newGame.shipsCounter}}
+  newGame.ships.push({ 
+    type: newGame.selectedShip, 
+    isDestroyed: false, 
+    fields: newGame.selectedFields.map(el => ({...el, isHit: false}))
+  })
+
+  return {
+    ...state,
+    game: {
+      ...state.game,
+      board: newBoard,
+      selectedShip: firtsAvailable,
+      ships: newGame.ships,
+      selectedFields: [],
+      shipsCounter: newGame.shipsCounter
+    }
+  }
 }
 
 const shootField = (row, col, state) => {
@@ -63,23 +81,32 @@ const shootField = (row, col, state) => {
   const isHit = getField(state.game.board, row, col).value === 'X' ? 'H' : '.'
   getField(newshootingBoard, row, col).value = isHit
 
-  return {...state, game: {...state.game, shootingBoard: newshootingBoard}}
+  let newShootedFields
+  let shootedFields = JSON.parse(JSON.stringify(state.game.shootedFields));
+
+  if (isHit) {
+    shootedFields.push({ row, col })
+    newShootedFields = shootedFields
+    //validateIfShipSunk(newShootedFields)
+  }
+
+  return { ...state, game: { ...state.game, shootingBoard: newshootingBoard }, shootedFields: newShootedFields }
 }
 
 export const gameReducer = (state = initialState, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'UPDATE_BOARD':
       return updateField(action.row, action.col, action.value, state);
     case 'SELECT_SHIP':
-      return {...state, game: {...state.game, selectedShip: action.value}};
+      return { ...state, game: { ...state.game, selectedShip: action.value } };
     case 'CONFIRM_SHIP_SELECTION':
       return updateAvailableShips(state);
     case 'REVEAL_BOARD':
-        return {...state, showBoard: true};
+      return { ...state, showBoard: true };
     case 'ENTER_BATTLE_PHASE':
-        return {...state, game: {...state.game, battlePhase: true}};
+      return { ...state, game: { ...state.game, battlePhase: true } };
     case 'SHOOT_FIELD':
-        return shootField(action.row, action.col, state)
+      return shootField(action.row, action.col, state)
     default:
       return state;
   }
