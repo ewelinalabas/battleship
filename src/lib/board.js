@@ -21,8 +21,19 @@ export const findAllEmptyNeighbours = (board, row, col) => {
   return neighbours.filter(f => !f.value).filter(f => !(f.row === row && f.col === col))
 }
 
-export const validateIfShipSunk = (board, hits) => {
+export const validateIfShipSunk = ships => {
+  ships.forEach(ship => {
+    if(ship.fields.filter(el => el.isHit === false).length === 0) {
+      ship.isDestroyed = true
+      console.log('destroyed') //to change
+    }
+  })
+}
 
+export const validateGameEnd = ships => {
+  if(ships.filter(ship => ship.isDestroyed === false).length === 0) {
+    console.log('game end')
+  }
 }
 
 const validateIfNeighbour = (row, col, selectedFields) => {

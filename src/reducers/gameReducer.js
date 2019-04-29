@@ -1,5 +1,9 @@
-import { getField, findAllEmptyNeighbours } from '../lib/board';
-import { board } from './boardFixedValue';
+import { 
+  getField, 
+  findAllEmptyNeighbours, 
+  validateIfShipSunk,
+  validateGameEnd } from '../lib/board';
+import { fixedState } from './boardFixedValue';
 
 const buildBoard = () => {
   let board = []
@@ -11,24 +15,26 @@ const buildBoard = () => {
   return board
 }
 
-const initialState = {
-  showBoard: true,
-  game: {
-    board: buildBoard(),
-    shootingBoard: buildBoard(),
-    battlePhase: false,
-    selectedShip: "1",
-    ships: [],
-    selectedFields: [],
-    shootedFields: [],
-    shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
-    }
-  }
-}
+// const initialState = {
+//   showBoard: true,
+//   game: {
+//     board: buildBoard(),
+//     shootingBoard: buildBoard(),
+//     battlePhase: false,
+//     selectedShip: "1",
+//     ships: [],
+//     selectedFields: [],
+//     shootedFields: [],
+//     shipsCounter: {
+//       "4": 1,
+//       "3": 2,
+//       "2": 3,
+//       "1": 4
+//     }
+//   }
+//}
+
+const initialState = fixedState
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state.game.board));
@@ -81,16 +87,18 @@ const shootField = (row, col, state) => {
   const isHit = getField(state.game.board, row, col).value === 'X' ? 'H' : '.'
   getField(newshootingBoard, row, col).value = isHit
 
-  let newShootedFields
   let shootedFields = JSON.parse(JSON.stringify(state.game.shootedFields));
+  let ships = JSON.parse(JSON.stringify(state.game.ships));
 
-  if (isHit) {
+  if (isHit === 'H') {
     shootedFields.push({ row, col })
-    newShootedFields = shootedFields
-    //validateIfShipSunk(newShootedFields)
+    const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
+    field.isHit = true
+    validateIfShipSunk(ships)
+    validateGameEnd(ships)
   }
 
-  return { ...state, game: { ...state.game, shootingBoard: newshootingBoard }, shootedFields: newShootedFields }
+  return { ...state, game: { ...state.game, shootingBoard: newshootingBoard, ships, shootedFields }}
 }
 
 export const gameReducer = (state = initialState, action) => {
