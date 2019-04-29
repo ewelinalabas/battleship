@@ -68,3 +68,7 @@ export const validateMove = (row, col, game) => {
   const checking_action = isCheckingAction(row, col, game)
   return checking_action ? validateChecking(row, col, game) : validateUnchecking(row, col, game)
 }
+
+export const validateShipConfirmation = (selectedShip, selectedFields) => (
+  parseInt(selectedShip, 10) === selectedFields.length
+);

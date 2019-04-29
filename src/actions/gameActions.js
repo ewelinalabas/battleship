@@ -1,4 +1,4 @@
-import { getField, validateMove } from '../lib/board'
+import { getField, validateMove, validateShipConfirmation } from '../lib/board'
 
 const UPDATE_BOARD = 'UPDATE_BOARD';
 const SELECT_SHIP = 'SELECT_SHIP';
@@ -18,6 +18,16 @@ export const makeDecision = (row, col) => {
   }
 }
 
+export const confirmShipSelection = () => {
+  return (dispatch, getState) => {
+    const { game } = getState();
+
+    if (validateShipConfirmation(game.selectedShip, game.selectedFields)) {
+      dispatch(confirmSelection())
+    }
+  }
+}
+
 const updateBoard = (row, col, value) => ({
   type: UPDATE_BOARD,
   row,
@@ -30,7 +40,7 @@ export const selectShip = value => ({
   value
 })
 
-export const confirmShipSelection = () => ({
+const confirmSelection = () => ({
   type: CONFIRM_SHIP_SELECTION
 })
 
