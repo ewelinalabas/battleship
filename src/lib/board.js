@@ -25,9 +25,20 @@ export const validateIfShipSunk = ships => {
   ships.forEach(ship => {
     if(ship.fields.filter(el => el.isHit === false).length === 0) {
       ship.isDestroyed = true
-      console.log('destroyed') //to change
     }
   })
+}
+
+export const findDestroyedShipNeighbours = (ships, shootingBoard) => {
+  let neighbours = []
+  ships.forEach(ship => {
+    if(ship.isDestroyed === true) {
+      ship.fields.forEach(el => {
+        neighbours.push(findAllEmptyNeighbours(shootingBoard, el.row, el.col))
+      })
+    }
+  })
+  return neighbours.flat()
 }
 
 export const validateGameEnd = ships => {

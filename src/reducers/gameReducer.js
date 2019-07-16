@@ -2,6 +2,7 @@ import {
   getField, 
   findAllEmptyNeighbours, 
   validateIfShipSunk,
+  findDestroyedShipNeighbours,
   validateGameEnd } from '../lib/board';
 import { fixedState } from './boardFixedValue';
 
@@ -95,6 +96,9 @@ const shootField = (row, col, state) => {
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
     validateIfShipSunk(ships)
+    findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
+      newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
+    })
     validateGameEnd(ships)
   }
 
