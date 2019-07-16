@@ -96,7 +96,11 @@ const shootField = (row, col, state) => {
     shootedFields.push({ row, col })
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
-    validateIfShipSunk(ships).isDestroyed = true
+    let validatedShip = validateIfShipSunk(ships)
+    if(validatedShip) {
+      validatedShip.isDestroyed = true
+      newMessage = ":)"
+    } else {newMessage = ":("}
     findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
       newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
     })
