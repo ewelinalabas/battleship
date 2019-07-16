@@ -90,19 +90,20 @@ const shootField = (row, col, state) => {
 
   let shootedFields = JSON.parse(JSON.stringify(state.game.shootedFields));
   let ships = JSON.parse(JSON.stringify(state.game.ships));
+  let newMessage = state.game.message
 
   if (isHit === 'H') {
     shootedFields.push({ row, col })
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
-    validateIfShipSunk(ships)
+    validateIfShipSunk(ships).isDestroyed = true
     findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
       newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
     })
     validateGameEnd(ships)
   }
 
-  return { ...state, game: { ...state.game, shootingBoard: newshootingBoard, ships, shootedFields }}
+  return { ...state, game: { ...state.game, message: newMessage, shootingBoard: newshootingBoard, ships, shootedFields }}
 }
 
 export const gameReducer = (state = initialState, action) => {
