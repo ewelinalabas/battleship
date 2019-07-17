@@ -2,6 +2,7 @@ export const fixedState =
   {
     showBoard: true,
     game: {
+      message: "",
       board: [
         {
           row: 1,

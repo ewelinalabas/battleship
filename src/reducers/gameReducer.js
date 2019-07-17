@@ -90,17 +90,18 @@ const shootField = (row, col, state) => {
 
   let shootedFields = JSON.parse(JSON.stringify(state.game.shootedFields));
   let ships = JSON.parse(JSON.stringify(state.game.ships));
-  let newMessage = state.game.message
+  let newMessage = "You missed."
 
   if (isHit === 'H') {
     shootedFields.push({ row, col })
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
+    newMessage = "You hit a battleship! Take next shot."
     let validatedShip = validateIfShipSunk(ships)
     if(validatedShip) {
       validatedShip.isDestroyed = true
-      newMessage = ":)"
-    } else {newMessage = ":("}
+      newMessage = "You sank the battleship! Take next shot."
+    }
     findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
       newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
     })

@@ -30,11 +30,12 @@ class GamePure extends Component {
           <SelectShip counter={this.props.shipsCounter}/>
         </div>
       )
-    } else if (this.props.showBoard === true && this.props.battlePhase === true) {
+    } else if(this.props.showBoard === true && this.props.battlePhase === true) {
       return (
         <div>
           <h1>Battle</h1>
           <Board board={buildBoard(this.props.shootingBoard)} handleClick={this.handleShoot.bind(this)}/>
+          <p>{this.props.message}</p>
         </div>
       )
     } else {
@@ -51,7 +52,8 @@ export const Game = connect(
     board: state.game.board, 
     shootingBoard: state.game.shootingBoard,
     shipsCounter: state.game.shipsCounter, 
-    battlePhase: state.game.battlePhase 
+    battlePhase: state.game.battlePhase,
+    message:  state.game.message
   }),
   dispatch => ({
     makeDecision: (row, col) => dispatch(makeDecision(row, col)),
