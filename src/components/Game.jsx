@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Board } from './Board';
 import { makeDecision, revealBoard, shoot } from '../actions/gameActions';
 import { SelectShip } from './SelectShip';
+import { Message } from './Message';
 
 const buildBoard = state => {
   let board = []
@@ -35,7 +36,7 @@ class GamePure extends Component {
         <div>
           <h1>Battle</h1>
           <Board board={buildBoard(this.props.shootingBoard)} handleClick={this.handleShoot.bind(this)}/>
-          <p>{this.props.message}</p>
+          <Message />
         </div>
       )
     } else {
@@ -52,8 +53,7 @@ export const Game = connect(
     board: state[state.currentPlayer].board, 
     shootingBoard: state[state.currentPlayer].shootingBoard,
     shipsCounter: state[state.currentPlayer].shipsCounter, 
-    battlePhase: state.battlePhase,
-    message:  state[state.currentPlayer].message
+    battlePhase: state.battlePhase
   }),
   dispatch => ({
     makeDecision: (row, col) => dispatch(makeDecision(row, col)),

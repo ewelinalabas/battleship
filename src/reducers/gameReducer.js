@@ -16,43 +16,45 @@ const buildBoard = () => {
   return board
 }
 
-const initialState = {
-  showBoard: true,
-  currentPlayer: "player1",
-  battlePhase: false,
-  player1: {
-    board: buildBoard(),
-    shootingBoard: buildBoard(),
-    selectedShip: "1",
-    ships: [],
-    selectedFields: [],
-    shootedFields: [],
-    message: "",
-    shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
-    }
-  },
-  player2: {
-    board: buildBoard(),
-    shootingBoard: buildBoard(),
-    selectedShip: "1",
-    ships: [],
-    selectedFields: [],
-    shootedFields: [],
-    message: "",
-    shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
-    }
-  }
-}
+// const initialState = {
+//   showBoard: true,
+//   currentPlayer: "player1",
+//   battlePhase: false,
+    // message: "",
+    // nextMove: true,
+//   player1: {
+//     board: buildBoard(),
+//     shootingBoard: buildBoard(),
+//     selectedShip: "1",
+//     ships: [],
+//     selectedFields: [],
+//     shootedFields: [],
+//     message: "",
+//     shipsCounter: {
+//       "4": 1,
+//       "3": 2,
+//       "2": 3,
+//       "1": 4
+//     }
+//   },
+//   player2: {
+//     board: buildBoard(),
+//     shootingBoard: buildBoard(),
+//     selectedShip: "1",
+//     ships: [],
+//     selectedFields: [],
+//     shootedFields: [],
+//     message: "",
+//     shipsCounter: {
+//       "4": 1,
+//       "3": 2,
+//       "2": 3,
+//       "1": 4
+//     }
+//   }
+// }
 
-//const initialState = fixedState
+const initialState = fixedState
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state[state.currentPlayer].board));
@@ -101,23 +103,37 @@ const updateAvailableShips = state => {
 }
 
 const changePlayer = state => {
-  return state.currentPlayer === "player1" ? { ...state, currentPlayer: "player2" } : { ...state, currentPlayer: "player1" }
+  return state.currentPlayer === "player1" ? 
+    { ...state, message: "", nextMove: true, currentPlayer: "player2" } : 
+    { ...state, message: "", nextMove: true, currentPlayer: "player1" }
 }
 
 const shootField = (row, col, state) => {
-  const newshootingBoard = JSON.parse(JSON.stringify(state.game.shootingBoard));
-  const isHit = getField(state.game.board, row, col).value === 'X' ? 'H' : '.'
-  getField(newshootingBoard, row, col).value = isHit
+  let opponent
+  if(state.currentPlayer === 'player1') {
+    opponent = 'player2'
+  } else {
+    opponent = 'player1'
+  }
+  let isHit
+  if(state.nextMove) {
+    isHit = getField(state[opponent].board, row, col).value === 'X' ? 'H' : '.'
+  }
+  const newshootingBoard = JSON.parse(JSON.stringify(state[state.currentPlayer].shootingBoard));
 
-  let shootedFields = JSON.parse(JSON.stringify(state.game.shootedFields));
-  let ships = JSON.parse(JSON.stringify(state.game.ships));
-  let newMessage = "You missed."
+
+  //let shootedFields = JSON.parse(JSON.stringify(state[state.currentPlayer].shootedFields));
+  let ships = JSON.parse(JSON.stringify(state[opponent].ships));
+  let newMessage
+  let nextMove
 
   if (isHit === 'H') {
-    shootedFields.push({ row, col })
+    //shootedFields.push({ row, col })
+    getField(newshootingBoard, row, col).value = isHit
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
     newMessage = "You hit a battleship! Take next shot."
+    nextMove = true
     let validatedShip = validateIfShipSunk(ships)
     if(validatedShip) {
       validatedShip.isDestroyed = true
@@ -127,9 +143,18 @@ const shootField = (row, col, state) => {
       newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
     })
     validateGameEnd(ships)
+  } else {
+    getField(newshootingBoard, row, col).value = isHit
+    newMessage = "You missed."
+    nextMove = false
   }
 
-  return { ...state, game: { ...state.game, message: newMessage, shootingBoard: newshootingBoard, ships, shootedFields }}
+  return { ...state, 
+    message: newMessage, 
+    nextMove,
+    [state.currentPlayer]: { ...state[state.currentPlayer], shootingBoard: newshootingBoard}, //shootedFields
+    [opponent]: { ...state[opponent], ships }
+  }
 }
 
 export const gameReducer = (state = initialState, action) => {
@@ -145,7 +170,7 @@ export const gameReducer = (state = initialState, action) => {
     case 'END_TURN':
         return changePlayer(state)
     case 'ENTER_BATTLE_PHASE':
-      return { ...state, battlePhase: true };
+      return { ...state, currentPlayer: 'player1', battlePhase: true };
     case 'SHOOT_FIELD':
       return shootField(action.row, action.col, state)
     default:
