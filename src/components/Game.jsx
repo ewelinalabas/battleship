@@ -49,11 +49,11 @@ class GamePure extends Component {
 export const Game = connect(
   state => ({ 
     showBoard: state.showBoard, 
-    board: state.game.board, 
-    shootingBoard: state.game.shootingBoard,
-    shipsCounter: state.game.shipsCounter, 
-    battlePhase: state.game.battlePhase,
-    message:  state.game.message
+    board: state[state.currentPlayer].board, 
+    shootingBoard: state[state.currentPlayer].shootingBoard,
+    shipsCounter: state[state.currentPlayer].shipsCounter, 
+    battlePhase: state.battlePhase,
+    message:  state[state.currentPlayer].message
   }),
   dispatch => ({
     makeDecision: (row, col) => dispatch(makeDecision(row, col)),

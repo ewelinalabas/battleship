@@ -4,12 +4,14 @@ const UPDATE_BOARD = 'UPDATE_BOARD';
 const SELECT_SHIP = 'SELECT_SHIP';
 const CONFIRM_SHIP_SELECTION = 'CONFIRM_SHIP_SELECTION';
 const REVEAL_BOARD = 'REVEAL_BOARD';
+const END_TURN = 'END_TURN';
 const ENTER_BATTLE_PHASE = 'ENTER_BATTLE_PHASE';
 const SHOOT_FIELD = 'SHOOT_FIELD';
 
 export const makeDecision = (row, col) => {
   return (dispatch, getState) => {
-    const { game } = getState();
+    const state = getState();
+    const game = state[state.currentPlayer]
 
     if (validateMove(row, col, game)) {
       const value = getField(game.board, row, col).value ? null : "X"
@@ -20,7 +22,8 @@ export const makeDecision = (row, col) => {
 
 export const confirmShipSelection = () => {
   return (dispatch, getState) => {
-    const { game } = getState();
+    const state = getState();
+    const game = state[state.currentPlayer]
 
     if (validateShipConfirmation(game.selectedShip, game.selectedFields)) {
       dispatch(confirmSelection())
@@ -46,6 +49,10 @@ const confirmSelection = () => ({
 
 export const revealBoard = () => ({
   type: REVEAL_BOARD
+})
+
+export const endCurrentPlayerTurn = () => ({
+  type: END_TURN
 })
 
 export const enterBattlePhase = () => ({

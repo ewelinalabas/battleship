@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectShip, confirmShipSelection, enterBattlePhase } from '../actions/gameActions';
+import { selectShip, confirmShipSelection, endCurrentPlayerTurn, enterBattlePhase } from '../actions/gameActions';
 
 
 const SHIPS = {
@@ -28,34 +28,57 @@ class SelectShipPure extends Component {
     this.props.confirmSelection()
   }
 
+  endTurn() {
+    this.props.endTurn()
+  }
+
   startBattle() {
     this.props.startBattle()
   }
 
   render() {
-    return Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0 ? 
-      <div>
-        <h3>SELECT BATTLESHIP</h3>
-        <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
-          {Object.entries(availableShips(this.props.counter, SHIPS)).map((el, i) => 
-            <option value={el[0]} key={i}>{el[1]}</option>
-          )}
-        </select>
-          <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
-          <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
-      </div> : 
-      <div>
-        <p>Your fleet is ready for the battle!</p>
-        <button type="button" onClick={() => {this.startBattle()}}>Start battle</button>
-      </div>
+    if(Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0) { 
+      return (
+        <div>
+          <h3>SELECT BATTLESHIP</h3>
+          <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
+            {Object.entries(availableShips(this.props.counter, SHIPS)).map((el, i) => 
+              <option value={el[0]} key={i}>{el[1]}</option>
+            )}
+          </select>
+            <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
+            <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
+        </div> 
+      )
+    } else {
+      if(this.props.currentPlayer === 'player1') {
+        return (
+          <div>
+            <p>Your fleet is ready for the battle!</p>
+            <button type="button" onClick={() => {this.endTurn()}}>Next player</button>
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <p>Your fleet is ready for the battle!</p>
+            <button type="button" onClick={() => {this.startBattle()}}>Start battle</button>
+          </div>
+        )
+     }
+    }
   }
 }
 
 export const SelectShip = connect(
-  state => ({ selectedShip: state.game.selectedShip }),
+  state => ({ 
+    currentPlayer: state.currentPlayer, 
+    selectedShip: state[state.currentPlayer].selectedShip 
+  }),
   dispatch => ({
     selectShipType: value => dispatch(selectShip(value)),
     confirmSelection: () => dispatch(confirmShipSelection()),
+    endTurn: () => dispatch(endCurrentPlayerTurn()),
     startBattle: () => dispatch(enterBattlePhase())
   })
 )(SelectShipPure)
