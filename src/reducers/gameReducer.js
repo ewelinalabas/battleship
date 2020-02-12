@@ -142,7 +142,10 @@ const shootField = (row, col, state) => {
     findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
       newshootingBoard.find(f => f.row === el.row && f.col === el.col).value = "."
     })
-    validateGameEnd(ships)
+    if(validateGameEnd(ships)) {
+      newMessage = "GAME OVER! " + state.currentPlayer + " won."
+      nextMove = false
+    }
   } else {
     getField(newshootingBoard, row, col).value = isHit
     newMessage = "You missed."

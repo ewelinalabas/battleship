@@ -46,7 +46,7 @@ export const findDestroyedShipNeighbours = (ships, shootingBoard) => {
 
 export const validateGameEnd = ships => {
   if(ships.filter(ship => ship.isDestroyed === false).length === 0) {
-    console.log('game end')
+    return true
   }
 }
 
