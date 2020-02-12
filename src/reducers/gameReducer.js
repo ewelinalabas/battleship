@@ -16,45 +16,45 @@ const buildBoard = () => {
   return board
 }
 
-// const initialState = {
-//   showBoard: true,
-//   currentPlayer: "player1",
-//   battlePhase: false,
-    // message: "",
-    // nextMove: true,
-//   player1: {
-//     board: buildBoard(),
-//     shootingBoard: buildBoard(),
-//     selectedShip: "1",
-//     ships: [],
-//     selectedFields: [],
-//     shootedFields: [],
-//     message: "",
-//     shipsCounter: {
-//       "4": 1,
-//       "3": 2,
-//       "2": 3,
-//       "1": 4
-//     }
-//   },
-//   player2: {
-//     board: buildBoard(),
-//     shootingBoard: buildBoard(),
-//     selectedShip: "1",
-//     ships: [],
-//     selectedFields: [],
-//     shootedFields: [],
-//     message: "",
-//     shipsCounter: {
-//       "4": 1,
-//       "3": 2,
-//       "2": 3,
-//       "1": 4
-//     }
-//   }
-// }
+const initialState = {
+  showBoard: true,
+  currentPlayer: "player1",
+  battlePhase: false,
+  message: "",
+  nextMove: true,
+  player1: {
+    board: buildBoard(),
+    shootingBoard: buildBoard(),
+    selectedShip: "1",
+    ships: [],
+    selectedFields: [],
+    shootedFields: [],
+    message: "",
+    shipsCounter: {
+      "4": 1,
+      "3": 2,
+      "2": 3,
+      "1": 4
+    }
+  },
+  player2: {
+    board: buildBoard(),
+    shootingBoard: buildBoard(),
+    selectedShip: "1",
+    ships: [],
+    selectedFields: [],
+    shootedFields: [],
+    message: "",
+    shipsCounter: {
+      "4": 1,
+      "3": 2,
+      "2": 3,
+      "1": 4
+    }
+  }
+}
 
-const initialState = fixedState
+//const initialState = fixedState
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state[state.currentPlayer].board));
