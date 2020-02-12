@@ -25,7 +25,7 @@ const Field = props => (
 
 export const Board = props => {
   return (
-    <table style={{ borderCollapse: 'collapse' }}>
+    <table className="game-preparation bottom">
       <tbody>
         {props.board.map((row, i) =>
           <Row 

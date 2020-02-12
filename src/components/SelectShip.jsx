@@ -39,7 +39,7 @@ class SelectShipPure extends Component {
   render() {
     if(Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0) { 
       return (
-        <div>
+        <div className="game-preparation top">
           <h3>SELECT BATTLESHIP</h3>
           <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
             {Object.entries(availableShips(this.props.counter, SHIPS)).map((el, i) => 
