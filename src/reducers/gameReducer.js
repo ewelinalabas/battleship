@@ -162,7 +162,7 @@ export const gameReducer = (state = initialState, action) => {
     case 'UPDATE_BOARD':
         return updateField(action.row, action.col, action.value, state);
     case 'SELECT_SHIP':
-      return { ...state, game: { ...state.game, selectedShip: action.value } };
+      return { ...state, [state.currentPlayer]: { ...state[state.currentPlayer], selectedShip: action.value } };
     case 'CONFIRM_SHIP_SELECTION':
       return updateAvailableShips(state);
     case 'REVEAL_BOARD':
