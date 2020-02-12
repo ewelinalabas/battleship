@@ -24,7 +24,8 @@ export const findAllEmptyNeighbours = (board, row, col) => {
 export const validateIfShipSunk = ships => {
   let destroyedShip
   ships.forEach(ship => {
-    if(ship.fields.filter(el => el.isHit === false).length === 0) {
+    if(ship.isDestroyed === false && 
+      ship.fields.filter(el => el.isHit === false).length === 0) {
       destroyedShip = ship
     }
   })

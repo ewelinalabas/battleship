@@ -16,45 +16,45 @@ const buildBoard = () => {
   return board
 }
 
-const initialState = {
-  showBoard: true,
-  currentPlayer: "player1",
-  battlePhase: false,
-  message: "",
-  nextMove: true,
-  player1: {
-    board: buildBoard(),
-    shootingBoard: buildBoard(),
-    selectedShip: "1",
-    ships: [],
-    selectedFields: [],
-    shootedFields: [],
-    message: "",
-    shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
-    }
-  },
-  player2: {
-    board: buildBoard(),
-    shootingBoard: buildBoard(),
-    selectedShip: "1",
-    ships: [],
-    selectedFields: [],
-    shootedFields: [],
-    message: "",
-    shipsCounter: {
-      "4": 1,
-      "3": 2,
-      "2": 3,
-      "1": 4
-    }
-  }
-}
+// const initialState = {
+//   showBoard: true,
+//   currentPlayer: "player1",
+//   battlePhase: false,
+//   message: "",
+//   nextMove: true,
+//   player1: {
+//     board: buildBoard(),
+//     shootingBoard: buildBoard(),
+//     selectedShip: "1",
+//     ships: [],
+//     selectedFields: [],
+//     shootedFields: [],
+//     message: "",
+//     shipsCounter: {
+//       "4": 1,
+//       "3": 2,
+//       "2": 3,
+//       "1": 4
+//     }
+//   },
+//   player2: {
+//     board: buildBoard(),
+//     shootingBoard: buildBoard(),
+//     selectedShip: "1",
+//     ships: [],
+//     selectedFields: [],
+//     shootedFields: [],
+//     message: "",
+//     shipsCounter: {
+//       "4": 1,
+//       "3": 2,
+//       "2": 3,
+//       "1": 4
+//     }
+//   }
+// }
 
-//const initialState = fixedState
+const initialState = fixedState
 
 const updateField = (row, col, value, state) => {
   const newBoard = JSON.parse(JSON.stringify(state[state.currentPlayer].board));
@@ -122,21 +122,21 @@ const shootField = (row, col, state) => {
   const newshootingBoard = JSON.parse(JSON.stringify(state[state.currentPlayer].shootingBoard));
 
 
-  //let shootedFields = JSON.parse(JSON.stringify(state[state.currentPlayer].shootedFields));
+  // let shootedFields = JSON.parse(JSON.stringify(state[state.currentPlayer].shootedFields));
   let ships = JSON.parse(JSON.stringify(state[opponent].ships));
   let newMessage
   let nextMove
 
   if (isHit === 'H') {
-    //shootedFields.push({ row, col })
+    // shootedFields.push({ row, col })
     getField(newshootingBoard, row, col).value = isHit
     const field = ships.map(ship => ship.fields).flat().find(el => (el.row === row && el.col === col))
     field.isHit = true
     newMessage = "You hit a battleship! Take next shot."
     nextMove = true
-    let validatedShip = validateIfShipSunk(ships)
-    if(validatedShip) {
-      validatedShip.isDestroyed = true
+    let sunkenShip = validateIfShipSunk(ships)
+    if(sunkenShip) {
+      sunkenShip.isDestroyed = true
       newMessage = "You sank the battleship! Take next shot."
     }
     findDestroyedShipNeighbours(ships, newshootingBoard).forEach(el => {
