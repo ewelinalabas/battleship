@@ -40,14 +40,23 @@ class SelectShipPure extends Component {
     if(Object.entries(availableShips(this.props.counter, SHIPS)).length !== 0) { 
       return (
         <div className="game-preparation top">
-          <h3>SELECT BATTLESHIP</h3>
-          <select onChange={this.handleChange.bind(this)} value={this.props.selectedShip}>
+          <h3>Select battleship</h3>
+          <select 
+            className="ship-selector"
+            onChange={this.handleChange.bind(this)} 
+            value={this.props.selectedShip}
+          >
             {Object.entries(availableShips(this.props.counter, SHIPS)).map((el, i) => 
               <option value={el[0]} key={i}>{el[1]}</option>
             )}
           </select>
-            <p>Current selection: {SHIPS[this.props.selectedShip]}</p>
-            <button type="button" onClick={() => {this.handleConfirmation()}}>Confirm</button>
+            <p>Place {SHIPS[this.props.selectedShip]} on the board</p>
+            <button 
+              className="confirmation-button" 
+              type="button" 
+              onClick={() => {this.handleConfirmation()}}>
+                Confirm placement
+            </button>
         </div> 
       )
     } else {

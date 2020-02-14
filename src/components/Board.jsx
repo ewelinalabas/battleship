@@ -14,7 +14,7 @@ const Row = props => (
 
 const Field = props => (
   <td 
-    style={{ border: '1px solid black', width: '30px', height: '30px' }}
+    className="field"
     onClick={() => {
       props.handleClick(props.field.row, props.field.col)}
     }
